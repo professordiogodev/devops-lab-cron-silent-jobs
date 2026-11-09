@@ -1,6 +1,4 @@
-# Cron: Five Jobs That Never Ran
-
-Every night five jobs should run: a report, a backup, a stamp, a greeting and a data import. Nothing has run for a week, and cron said nothing. Find out why, five times.
+<p align="center"><img src="assets/banner.svg" alt="Cron: Five Jobs That Never Ran" width="100%"></p>
 
 | | |
 |-|-|
@@ -17,9 +15,10 @@ Every night five jobs should run: a report, a backup, a stamp, a greeting and a 
 5. Commit and push. Open the **Actions** tab of your fork (click *I understand my workflows, go ahead and enable them* the first time). The **Lab check** shows what is still missing.
 6. When the check is green, **submit the URL of your fork** in the course platform.
 
+> [!NOTE]
 > The check only looks at your answers and any files the lab asks you to commit. Your instructor reads your work and may ask you to explain any line.
 
----
+<p align="center"><img src="assets/divider.svg" alt="" width="100%"></p>
 
 ## The situation
 
@@ -27,6 +26,7 @@ Monday. Finance asks why the weekly report never arrived. Support asks why there
 
 Cron is the oldest scheduler on Linux and the quietest. When a job fails, nothing tells you. Your job is to learn how to make a silent system talk, by fixing five jobs that each fail for a **different** reason.
 
+> [!IMPORTANT]
 > **Your mission**
 > - Find out why each of the five jobs does not run, with evidence
 > - Understand how cron's environment differs from your own shell
@@ -34,7 +34,7 @@ Cron is the oldest scheduler on Linux and the quietest. When a job fails, nothin
 
 **Time:** 45-60 min | **Cost:** free | **You need:** your Ubuntu environment with `sudo` and systemd. `sudo ./teardown.sh` removes the lab.
 
----
+<p align="center"><img src="assets/divider.svg" alt="" width="100%"></p>
 
 ## Part 0 - Set the scene
 
@@ -48,7 +48,7 @@ It installs cron and five jobs in `/etc/cron.d/clipstr-lab`. A copy is in `clips
 
 Wait one minute, then look in `/var/log/clipstr-lab/`.
 
----
+<p align="center"><img src="assets/divider.svg" alt="" width="100%"></p>
 
 ## Part 1 - Recon
 
@@ -57,9 +57,10 @@ Wait one minute, then look in `/var/log/clipstr-lab/`.
 3. Is cron itself running? `systemctl status cron`.
 4. What does cron say about the jobs? `sudo journalctl -u cron --since "5 minutes ago"`. Does the log tell you whether any job **succeeded**?
 
+> [!NOTE]
 > **Predict** The log shows the jobs were *started*. Does that mean they worked? Write down what you think the log can and cannot tell you.
 
----
+<p align="center"><img src="assets/divider.svg" alt="" width="100%"></p>
 
 ## Part 2 - Investigate: five jobs, five reasons
 
@@ -79,9 +80,10 @@ Run each command that way and read the error. Fill in a table: job, error messag
 | 4 `greet.sh` | It needs a variable. Where do variables come from in your shell, and where in cron? |
 | 5 `import.sh` | It reads `data.csv` without a path. In which directory does cron start jobs? |
 
+> [!WARNING]
 > **Break it** Before you fix anything, run job 3 by hand in your own shell: it works. Run it through `env -i ... /bin/sh -c` exactly as written in the file: what happens? Explain why "it works on my machine" is the standard sentence about cron.
 
----
+<p align="center"><img src="assets/divider.svg" alt="" width="100%"></p>
 
 ## Part 3 - Fix and make it loud
 
@@ -102,9 +104,10 @@ watch -n 5 'ls -l --time-style=+%T /var/log/clipstr-lab/'
 
 Rules: all five jobs stay scheduled every minute for this lab, they keep running as the `clipstr` user, and at least one captures its output with `2>&1`.
 
+> [!NOTE]
 > **Think** What does `2>&1` mean, in order, one symbol at a time? What happens to a job's output when you leave it out (hint: `MAILTO`, and whether a mail server is installed)?
 
----
+<p align="center"><img src="assets/divider.svg" alt="" width="100%"></p>
 
 ## Part 4 - Schedule like a professional
 
@@ -115,7 +118,7 @@ Answer these on paper (they go in your submission), then test your expressions w
 3. At 03:00 on the first day of every month.
 4. Why is `*/90 * * * *` not "every 90 minutes"?
 
----
+<p align="center"><img src="assets/divider.svg" alt="" width="100%"></p>
 
 ## Part 5 - Prove it
 
@@ -125,7 +128,7 @@ sudo ./verify.sh
 
 It waits up to two and a half minutes for cron to fire, then checks each job's marker.
 
----
+<p align="center"><img src="assets/divider.svg" alt="" width="100%"></p>
 
 ## Level up (optional)
 
