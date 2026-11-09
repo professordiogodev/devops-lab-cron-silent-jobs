@@ -11,10 +11,10 @@ no_path() { [ ! -e "$1" ]; }
 no_proc() { ! pgrep -f "$1" >/dev/null 2>&1; }
 no_listener() { ! ss -ltn 2>/dev/null | grep -qE ":$1\\b"; }
 
-check "/etc/cron.d/clipstr-lab is gone" no_path /etc/cron.d/clipstr-lab
-check "/opt/clipstr-jobs is gone" no_path /opt/clipstr-jobs
-check "/var/log/clipstr-lab is gone" no_path /var/log/clipstr-lab
-check "user clipstr is gone" no_user clipstr
+check "/etc/cron.d/clippy-lab is gone" no_path /etc/cron.d/clippy-lab
+check "/opt/clippy-jobs is gone" no_path /opt/clippy-jobs
+check "/var/log/clippy-lab is gone" no_path /var/log/clippy-lab
+check "user clippy is gone" no_user clippy
 
 echo
 if [ "$failn" -eq 0 ]; then echo "TEARDOWN VERIFIED ($pass/$pass)"; else echo "NOT CLEAN: $failn leftover(s). Finish the tear down steps and run this again."; fi

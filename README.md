@@ -24,7 +24,7 @@
 
 <p align="center"><img src="assets/gifs/situation.gif" width="300" alt=""></p>
 
-Monday. Finance asks why the weekly report never arrived. Support asks why there are no backups from the last seven days. You check: five scheduled jobs on the Clipstr server, all "installed", and none of them has produced anything. Cron did not complain once. It never does.
+Monday. Finance asks why the weekly report never arrived. Support asks why there are no backups from the last seven days. You check: five scheduled jobs on the Clippy server, all "installed", and none of them has produced anything. Cron did not complain once. It never does.
 
 Cron is the oldest scheduler on Linux and the quietest. When a job fails, nothing tells you. Your job is to learn how to make a silent system talk, by fixing five jobs that each fail for a **different** reason.
 
@@ -46,9 +46,9 @@ Fork this repository, clone your fork, and run:
 sudo ./setup.sh
 ```
 
-It installs cron and five jobs in `/etc/cron.d/clipstr-lab`. A copy is in `clipstr-lab.cron` in this repo: **edit that file**, then install it with `sudo cp clipstr-lab.cron /etc/cron.d/clipstr-lab`. When a job succeeds it writes a line to `/var/log/clipstr-lab/<name>.ok`.
+It installs cron and five jobs in `/etc/cron.d/clippy-lab`. A copy is in `clippy-lab.cron` in this repo: **edit that file**, then install it with `sudo cp clippy-lab.cron /etc/cron.d/clippy-lab`. When a job succeeds it writes a line to `/var/log/clippy-lab/<name>.ok`.
 
-Wait one minute, then look in `/var/log/clipstr-lab/`.
+Wait one minute, then look in `/var/log/clippy-lab/`.
 
 <p align="center"><img src="assets/divider.svg" alt="" width="100%"></p>
 
@@ -56,8 +56,8 @@ Wait one minute, then look in `/var/log/clipstr-lab/`.
 
 <p align="center"><img src="assets/gifs/recon.gif" width="300" alt=""></p>
 
-1. `ls -l /var/log/clipstr-lab/`. What is there? Is that what you expected after a minute of five jobs?
-2. `cat clipstr-lab.cron`. Read each line. The six columns are minute, hour, day of month, month, day of week, **user**, then the command. (Files in `/etc/cron.d` have a user column, a personal `crontab -e` does not.)
+1. `ls -l /var/log/clippy-lab/`. What is there? Is that what you expected after a minute of five jobs?
+2. `cat clippy-lab.cron`. Read each line. The six columns are minute, hour, day of month, month, day of week, **user**, then the command. (Files in `/etc/cron.d` have a user column, a personal `crontab -e` does not.)
 3. Is cron itself running? `systemctl status cron`.
 4. What does cron say about the jobs? `sudo journalctl -u cron --since "5 minutes ago"`. Does the log tell you whether any job **succeeded**?
 
@@ -71,7 +71,7 @@ Wait one minute, then look in `/var/log/clipstr-lab/`.
 For each job, **reproduce the failure by hand as the same user in cron's environment**. Cron runs your command with almost nothing set. This is how to imitate it:
 
 ```bash
-sudo -u clipstr env -i HOME=/opt/clipstr-jobs SHELL=/bin/sh PATH=/usr/bin:/bin /bin/sh -c '<the command here>'
+sudo -u clippy env -i HOME=/opt/clippy-jobs SHELL=/bin/sh PATH=/usr/bin:/bin /bin/sh -c '<the command here>'
 ```
 
 Run each command that way and read the error. Fill in a table: job, error message, root cause, fix.
@@ -79,7 +79,7 @@ Run each command that way and read the error. Fill in a table: job, error messag
 | Job | Hints |
 |-----|-------|
 | 1 `report.sh` | Read the error carefully. What does `ls -l` say about the file? |
-| 2 `backup-db` | Is the command found? What is cron's `PATH`? Where is the program (`ls /opt/clipstr-jobs/bin`)? |
+| 2 `backup-db` | Is the command found? What is cron's `PATH`? Where is the program (`ls /opt/clippy-jobs/bin`)? |
 | 3 the `echo "stamp ..."` job | Which character in the command does cron treat specially? Look in `man 5 crontab` for the word "percent". |
 | 4 `greet.sh` | It needs a variable. Where do variables come from in your shell, and where in cron? |
 | 5 `import.sh` | It reads `data.csv` without a path. In which directory does cron start jobs? |
@@ -91,22 +91,22 @@ Run each command that way and read the error. Fill in a table: job, error messag
 
 ## Part 3 - Fix and make it loud
 
-Edit `clipstr-lab.cron` so all five jobs work. You may use:
+Edit `clippy-lab.cron` so all five jobs work. You may use:
 
 - A `PATH=` line and other variable lines at the top of the file
 - `chmod`, or running the script through `bash`
 - Escaping with a backslash, or moving the logic into a script
 - `cd /somewhere &&` in front of a command
-- `>> /var/log/clipstr-lab/<name>.log 2>&1` so output and errors end up somewhere you can read
+- `>> /var/log/clippy-lab/<name>.log 2>&1` so output and errors end up somewhere you can read
 
-Install it, wait for the next minute, and watch `/var/log/clipstr-lab/`:
+Install it, wait for the next minute, and watch `/var/log/clippy-lab/`:
 
 ```bash
-sudo cp clipstr-lab.cron /etc/cron.d/clipstr-lab
-watch -n 5 'ls -l --time-style=+%T /var/log/clipstr-lab/'
+sudo cp clippy-lab.cron /etc/cron.d/clippy-lab
+watch -n 5 'ls -l --time-style=+%T /var/log/clippy-lab/'
 ```
 
-Rules: all five jobs stay scheduled every minute for this lab, they keep running as the `clipstr` user, and at least one captures its output with `2>&1`.
+Rules: all five jobs stay scheduled every minute for this lab, they keep running as the `clippy` user, and at least one captures its output with `2>&1`.
 
 > [!NOTE]
 > **Think** What does `2>&1` mean, in order, one symbol at a time? What happens to a job's output when you leave it out (hint: `MAILTO`, and whether a mail server is installed)?
@@ -151,7 +151,7 @@ Resources left behind cost money, keep doors open and pollute the next lab. Remo
 
 Do this **last**, after you have pasted your `verify` output into `SUBMISSION.md` (once you tear down, the lab can no longer be verified).
 
-1. Run `sudo ./teardown.sh`. It removes the five jobs, their scripts, the logs and the `clipstr` user.
+1. Run `sudo ./teardown.sh`. It removes the five jobs, their scripts, the logs and the `clippy` user.
 
 Then run the proof:
 
@@ -169,7 +169,7 @@ Answer the questions in `SUBMISSION.md` in **your fork** (paste output in code b
 
 **Files to commit**
 
-- `clipstr-lab.cron`: your fixed crontab file, committed to the repo
+- `clippy-lab.cron`: your fixed crontab file, committed to the repo
 
 **Questions to answer**
 

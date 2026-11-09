@@ -1,6 +1,0 @@
-# m h dom mon dow user command
-* * * * * clipstr /opt/clipstr-jobs/report.sh
-* * * * * clipstr backup-db
-* * * * * clipstr echo "stamp $(date +%T) on $(date +%F)" >> /var/log/clipstr-lab/stamp.ok
-* * * * * clipstr /opt/clipstr-jobs/greet.sh
-* * * * * clipstr /opt/clipstr-jobs/import.sh

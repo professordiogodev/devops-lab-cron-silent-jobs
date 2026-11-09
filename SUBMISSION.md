@@ -4,7 +4,7 @@ Fork URL: <!-- paste the URL of your fork here -->
 
 ## Files to commit
 
-- [ ] `clipstr-lab.cron`: your fixed crontab file, committed to the repo
+- [ ] `clippy-lab.cron`: your fixed crontab file, committed to the repo
 
 ## Questions
 
