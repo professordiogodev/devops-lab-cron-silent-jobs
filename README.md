@@ -22,11 +22,19 @@
 
 ## 🎬 The situation
 
-<p align="center"><img src="assets/gifs/situation.gif" width="300" alt="Animation: every minute"></p>
+<p align="center"><img src="assets/gifs/situation.gif" width="300" alt="A clock ticking while a scheduled job stays silent"></p>
 
-Monday. Finance asks why the weekly report never arrived. Support asks why there are no backups from the last seven days. You check: five scheduled jobs on the Clippy server, all "installed", and none of them has produced anything. Cron did not complain once. It never does.
+**Briefing - Monday, five bosses, one server**
 
-Cron is the oldest scheduler on Linux and the quietest. When a job fails, nothing tells you. Your job is to learn how to make a silent system talk, by fixing five jobs that each fail for a **different** reason.
+| Boss | What it was meant to do | What it did |
+|------|-------------------------|-------------|
+| 1 | weekly report for Finance | nothing |
+| 2 | nightly backup | nothing |
+| 3 | log clean-up | nothing |
+| 4 | health ping | nothing |
+| 5 | monthly archive | nothing |
+
+All five jobs are "installed" on the Clippy server. None has produced a single file. Cron did not complain once; it never does. Cron is the oldest scheduler on Linux and the quietest, and each boss on this list beats it for a **different** reason. Your weapon is evidence: find the cause, fix the job, and make every job **report its own failures** so the next silence is loud.
 
 > [!IMPORTANT]
 > **Your mission**
